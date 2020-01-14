@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  elasticsearch:
+    image: elasticsearch:6.6.0
+    expose:
+       - 9200
+    networks:
+      - janusgraph
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+    restart: always
+    container_name: janusgraph_elasticsearch
+
+  cassandra:
+    image: cassandra:3
+    expose:
+      - 7000
+      - 7001
+      - 7199
+      - 9042
+      - 9160
+      - 9404
+    networks:
+      - janusgraph
+    healthcheck:
+      test: ["CMD-SHELL", "[ $$(nodetool statusgossip) = running ]"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - cassandra:/var/lib/cassandra
+    restart: always
+    container_name: janusgraph_cassandra
+
+  janusgraph:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: janusgraphbuild
+    depends_on:
+      - elasticsearch
+      - cassandra
+    ports:
+      - "8182:8182"
+    networks:
+      - janusgraph
+    restart: always
+    container_name: janusgraph
+
+networks:
+  janusgraph:
+
+volumes:
+  cassandra:
+    external: true
+  elasticsearch:
+    external: true
