@@ -45,6 +45,7 @@ services:
       - "8182:8182"
     networks:
       - janusgraph
+    env_file: environment.env
     restart: always
     container_name: janusgraph
 
