@@ -14,7 +14,7 @@
 
 #gremlin.graph=org.janusgraph.core.JanusGraphFactory
 gremlin.graph=org.janusgraph.core.ConfiguredGraphFactory
-graph.graphname=GRAPHNAME
+graph.graphname=CGFGRAPHNAME
 graph.replace-instance-if-exists=true
 
 # JanusGraph configuration sample: Cassandra & Elasticsearch over sockets
